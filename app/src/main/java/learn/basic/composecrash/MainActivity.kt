@@ -1,6 +1,8 @@
 package learn.basic.composecrash
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -35,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,30 +50,33 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeCrashTheme {
-                NameList()
+                AddPerson(LocalContext.current)
             }
         }
     }
 }
 
 @Composable
-fun NameList() {
-     var name by remember { mutableStateOf("") }
-     var names by remember { mutableStateOf(listOf<String>()) }
+fun AddPerson(context: Context) {
+    var name by remember { mutableStateOf("") }
+    var names by remember { mutableStateOf(listOf<String>()) }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     )
     {
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
                 value = name,
-                onValueChange = {text ->
+                onValueChange = { text ->
                     name = text
                 },
+                label = { Text("Person name") },
                 // вес элемента, если 1 занимает все место которое осталось от других (кнопки)
                 modifier = Modifier.weight(1f)
             )
@@ -79,34 +85,44 @@ fun NameList() {
             Spacer(modifier = Modifier.width(16.dp))
 
             Button(onClick = {
-                if (name.isNotBlank()){
+                if (name.isNotBlank()) {
                     names = names + name
                     name = ""
+                } else {
+                    ToastTeser(context = context, "Please, write your name")
                 }
             }) {
                 Text(text = "Add")
             }
         }
+        NameList(names = names)
+    }
+}
 
-        LazyColumn {
-            items(names){ currentName ->
-                Text(
-                    text = currentName, 
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
-                // разделитель элементов
-                Divider()
-            }
+@Composable
+fun NameList(names: List<String>, modifier: Modifier = Modifier) {
+    LazyColumn {
+        items(names) { currentName ->
+            Text(
+                text = currentName,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+            // разделитель элементов
+            Divider()
         }
     }
+}
+
+fun ToastTeser(context: Context, errorMes: String) {
+    Toast.makeText(context, errorMes, Toast.LENGTH_SHORT).show()
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ComposeCrashTheme {
-        NameList()
+        AddPerson(LocalContext.current)
     }
 }
