@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -45,58 +47,22 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String,) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-    ) {
-        Text(
-            text = "Hello $name!",
-            fontSize = 16.sp,
-            color = Color.Red,
-        )
-        Text(
-            text = "Nice to meet you!",
-            fontSize = 16.sp,
-            color = Color.Red,
-        )
-
-    }
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .size(400.dp)
-    ) {
-        Text(
-            text = "Hello $name!",
-            fontSize = 16.sp,
-            color = Color.Red,
-//            modifier = Modifier
-//                .background(Color.Blue)
-//                .padding(16.dp)
-//                .background(Color.Green),
-        )
-        Text(
-            text = "Nice to meet you!",
-            fontSize = 16.sp,
-            color = Color.Red,
-//            modifier = Modifier
-//                .background(Color.Blue)
-//                .padding(16.dp)
-//                .background(Color.Green),
-        )
-        Image(painter = painterResource(id = R.drawable.ic_launcher_background),
-            contentDescription = null,
-            modifier = Modifier
-                .size(100.dp)
-        )
-        for (i in 1..3) {
-            Icon(
-                imageVector = Icons.Default.Done,
-                contentDescription = null
-            )
+fun Greeting(name: String) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(10){ i ->
+            Row(verticalAlignment = Alignment.CenterVertically,) {
+                Icon(imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
+                Text(
+                    text = "Hello $name!",
+                    fontSize = 24.sp,
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(Color.Black)
+                )
+            }
         }
     }
 }
