@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -33,11 +35,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeCrashTheme {
-                ImageCard(
-                    painterResource(R.drawable.obiwane),
-                    contentDescription = "Obi Wan Kenobi",
-                    title = "Obi Wan Kenobi",
-                    modifier = Modifier)
+                val painter = painterResource(R.drawable.obiwane)
+                val contentDescription = "Obi Wan Kenobi"
+                val title = "Obi Wan Kenobi"
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .padding(12.dp)
+                ) {
+                    ImageCard(
+                        painter,
+                        contentDescription,
+                        title,
+                    )
+                }
+
             }
         }
     }
@@ -48,7 +61,7 @@ fun ImageCard(
     painter: Painter,
     contentDescription: String,
     title: String,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -61,13 +74,30 @@ fun ImageCard(
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Crop,
             )
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            Color.Black
+                        ),
+                        startY = 400f
+                    )
+                )
+            )
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
                 contentAlignment = Alignment.BottomStart
             ) {
-                Text(title, style = TextStyle(color = Color.White, fontSize = 16.sp))
+                Text(
+                    title, style = TextStyle(
+                        color = Color.White,
+                        fontSize = 12.sp
+                    )
+                )
             }
 
         }
@@ -79,11 +109,18 @@ fun ImageCard(
 @Composable
 fun GreetingPreview() {
     ComposeCrashTheme {
-        ImageCard(
-            painterResource(R.drawable.obiwane),
-            contentDescription = "Obi Wan Kenobi",
-            title = "Obi Wan Kenobi",
-            modifier = Modifier)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .padding(12.dp)
+        ) {
+            ImageCard(
+                painterResource(R.drawable.obiwane),
+                contentDescription = "Obi Wan Kenobi",
+                title = "Obi Wan Kenobi",
+                modifier = Modifier
+            )
+        }
     }
 
 }
