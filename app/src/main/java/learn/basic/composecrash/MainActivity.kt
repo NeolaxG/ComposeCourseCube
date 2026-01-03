@@ -16,10 +16,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,34 +40,38 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeCrashTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Alex",
 
-                    )
-                }
+                Clicker()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(10){ i ->
-            Row(verticalAlignment = Alignment.CenterVertically,) {
-                Icon(imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp)
-                )
-                Text(
-                    text = "Hello $name!",
-                    fontSize = 24.sp,
-                    color = Color.White,
-                    modifier = Modifier
-                        .background(Color.Black)
-                )
-            }
+fun Clicker() {
+    // позволяет запоминать значение сделанное изменяемым для перекомановки элементов
+    var counter by remember {
+        mutableStateOf(0
+        )
+    }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // текст перекомануется (перерисовывается), при изменении текста
+        Text(
+            text = counter.toString(),
+            fontSize = 32.sp
+        )
+        // кнопка не перекомпановывается т.к. не изменяется
+        Button(onClick = {
+            counter++
+        }) {
+            Text(
+                text = "Click Me!",
+                fontSize = 32.sp
+            )
         }
     }
 }
@@ -71,6 +80,6 @@ fun Greeting(name: String) {
 @Composable
 fun GreetingPreview() {
     ComposeCrashTheme {
-        Greeting("Alex")
+        Clicker()
     }
 }
