@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,7 +25,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,24 +44,66 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val fontFamily = FontFamily(
+            Font(R.font.geostar_regular, FontWeight.Thin)
+        )
+
         setContent {
             ComposeCrashTheme {
                 val painter = painterResource(R.drawable.obiwane)
                 val contentDescription = "Obi Wan Kenobi"
                 val title = "Obi Wan Kenobi"
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .padding(12.dp)
-                ) {
-                    ImageCard(
-                        painter,
-                        contentDescription,
-                        title,
-                    )
-                }
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFF101010)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    style = SpanStyle(
+                                        color = Color.Red,
+                                        fontSize = 48.sp
+                                    )
+                                ) {
+                                    append("S")
+                                }
+                                append("tar")
+                                withStyle(
+                                    style = SpanStyle(
+                                        color = Color.Red,
+                                        fontSize = 48.sp
+                                    )
+                                ) {
+                                    append("W")
+                                }
+                                append("ars")
+                            },
+                            color = Color.White,
+                            fontSize = 32.sp,
+                            fontFamily = fontFamily,
+                            fontStyle = FontStyle.Italic,
+                            textAlign = TextAlign.Center,
+                            textDecoration = TextDecoration.Underline
 
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .padding(12.dp)
+                    ) {
+                        ImageCard(
+                            painter,
+                            contentDescription,
+                            title,
+                        )
+                    }
+                }
             }
         }
     }
@@ -74,17 +127,18 @@ fun ImageCard(
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Crop,
             )
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            Color.Black
-                        ),
-                        startY = 400f
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Black
+                            ),
+                            startY = 400f
+                        )
                     )
-                )
             )
             Box(
                 modifier = Modifier
@@ -109,17 +163,63 @@ fun ImageCard(
 @Composable
 fun GreetingPreview() {
     ComposeCrashTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .padding(12.dp)
-        ) {
-            ImageCard(
-                painterResource(R.drawable.obiwane),
-                contentDescription = "Obi Wan Kenobi",
-                title = "Obi Wan Kenobi",
+        val fontFamily = FontFamily(
+            Font(R.font.geostar_regular, FontWeight.Thin)
+        )
+
+        val painter = painterResource(R.drawable.obiwane)
+        val contentDescription = "Obi Wan Kenobi"
+        val title = "Obi Wan Kenobi"
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
                 modifier = Modifier
-            )
+                    .fillMaxWidth()
+                    .background(Color(0xFF101010)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Red,
+                                fontSize = 48.sp
+                            )
+                        ) {
+                            append("S")
+                        }
+                        append("tar")
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Red,
+                                fontSize = 48.sp
+                            )
+                        ) {
+                            append("W")
+                        }
+                        append("ars")
+                    },
+                    color = Color.White,
+                    fontSize = 32.sp,
+                    fontFamily = fontFamily,
+                    fontStyle = FontStyle.Italic,
+                    textAlign = TextAlign.Center,
+                    textDecoration = TextDecoration.Underline
+
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .padding(12.dp)
+            ) {
+                ImageCard(
+                    painter,
+                    contentDescription,
+                    title,
+                )
+            }
         }
     }
 
