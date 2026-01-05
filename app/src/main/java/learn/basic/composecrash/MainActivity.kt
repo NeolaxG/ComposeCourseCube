@@ -1,5 +1,6 @@
 package learn.basic.composecrash
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,23 +8,28 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -38,7 +44,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import learn.basic.composecrash.data.PersonData
 import learn.basic.composecrash.ui.theme.ComposeCrashTheme
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +56,19 @@ class MainActivity : ComponentActivity() {
             Font(R.font.geostar_regular, FontWeight.Thin)
         )
 
+        val persons = listOf(
+            PersonData(R.drawable.obiwane, "Jedi", "Obi Wan Kenobi"),
+            PersonData(R.drawable.obiwane, "Jedi", "Anakin Skywalker"),
+            PersonData(R.drawable.obiwane, "Jedi", "Mace Windu"),
+            PersonData(R.drawable.obiwane, "Jedi", "Yoda")
+        )
+
+
         setContent {
             ComposeCrashTheme {
-                val painter = painterResource(R.drawable.obiwane)
-                val contentDescription = "Obi Wan Kenobi"
-                val title = "Obi Wan Kenobi"
+//                val painter = painterResource(R.drawable.obiwane)
+//                val contentDescription = "Obi Wan Kenobi"
+//                val title = "Obi Wan Kenobi"
 
                 Column(modifier = Modifier.fillMaxSize()) {
                     Box(
@@ -91,17 +107,16 @@ class MainActivity : ComponentActivity() {
 
                         )
                     }
-
+                    persons.forEach { person ->
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
                             .padding(12.dp)
                     ) {
-                        ImageCard(
-                            painter,
-                            contentDescription,
-                            title,
-                        )
+                            ImageCard(
+                                personData = person
+                            )
+                        }
                     }
                 }
             }
@@ -111,9 +126,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ImageCard(
-    painter: Painter,
-    contentDescription: String,
-    title: String,
+    personData: PersonData,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -123,8 +136,8 @@ fun ImageCard(
     ) {
         Box(modifier = Modifier.height(200.dp)) {
             Image(
-                painter = painter,
-                contentDescription = contentDescription,
+                painter = painterResource(personData.painterId),
+                contentDescription = personData.contentDescription,
                 contentScale = ContentScale.Crop,
             )
             Box(
@@ -147,7 +160,7 @@ fun ImageCard(
                 contentAlignment = Alignment.BottomStart
             ) {
                 Text(
-                    title, style = TextStyle(
+                    personData.title, style = TextStyle(
                         color = Color.White,
                         fontSize = 12.sp
                     )
@@ -162,20 +175,37 @@ fun ImageCard(
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
+    val fontFamily = FontFamily(
+        Font(R.font.geostar_regular, FontWeight.Thin)
+    )
+
+//        val painter = painterResource(R.drawable.obiwane)
+//        val contentDescription = "Obi Wan Kenobi"
+//        val title = "Obi Wan Kenobi"
+
+    val colorState = remember {mutableStateOf(Color.Black)}
+    val persons = listOf(
+        PersonData(R.drawable.obiwane, "Jedi", "Obi Wan Kenobi"),
+        PersonData(R.drawable.obiwane, "Jedi", "Anakin Skywalker"),
+        PersonData(R.drawable.obiwane, "Jedi", "Mace Windu"),
+        PersonData(R.drawable.obiwane, "Jedi", "Yoda")
+    )
+
     ComposeCrashTheme {
-        val fontFamily = FontFamily(
-            Font(R.font.geostar_regular, FontWeight.Thin)
-        )
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
 
-        val painter = painterResource(R.drawable.obiwane)
-        val contentDescription = "Obi Wan Kenobi"
-        val title = "Obi Wan Kenobi"
-
-        Column(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF101010)),
+                    .background(colorState.value)
+                    .clickable{
+                        colorState.value = Color(
+                            Random.nextFloat(),
+                            Random.nextFloat(),
+                            Random.nextFloat(),
+                            1f,
+                        )
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -208,17 +238,16 @@ fun GreetingPreview() {
 
                 )
             }
-
+            persons.forEach { person ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .padding(12.dp)
             ) {
-                ImageCard(
-                    painter,
-                    contentDescription,
-                    title,
-                )
+                    ImageCard(
+                        personData = person
+                    )
+                }
             }
         }
     }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ComposeCrash</string>
+    <string name="title_activity_person_detail">PersonDetail</string>
 </resources>
