@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.painter.Painter
 
 data class PersonData(
     val painterId: Int,
-    val contentDescription: String,
+    val personProf: String,
     val title: String,
+    val personInfo: String
 )
